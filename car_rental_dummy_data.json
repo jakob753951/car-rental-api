@@ -1,0 +1,65 @@
+[
+    {
+        "make": "Toyota",
+        "model": "Camry",
+        "year": 2023,
+        "type": "Sedan",
+        "price_per_day": 60.99,
+        "location": "Los Angeles",
+        "available": true
+    },
+    {
+        "make": "Ford",
+        "model": "Explorer",
+        "year": 2022,
+        "type": "SUV",
+        "price_per_day": 75.50,
+        "location": "New York",
+        "available": true
+    },
+    {
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2023,
+        "type": "Compact",
+        "price_per_day": 55.75,
+        "location": "Chicago",
+        "available": false
+    },
+    {
+        "make": "Chevrolet",
+        "model": "Tahoe",
+        "year": 2022,
+        "type": "SUV",
+        "price_per_day": 80.25,
+        "location": "Miami",
+        "available": true
+    },
+    {
+        "make": "Nissan",
+        "model": "Altima",
+        "year": 2023,
+        "type": "Sedan",
+        "price_per_day": 63.00,
+        "location": "San Francisco",
+        "available": true
+    },
+    {
+        "make": "Volkswagen",
+        "model": "Jetta",
+        "year": 2019,
+        "type": "Sedan",
+        "price_per_day": 45.50,
+        "location": "Dallas",
+        "available": true
+    },
+    {
+        "make": "Hyundai",
+        "model": "Tucson",
+        "year": 2018,
+        "type": "SUV",
+        "price_per_day": 52.75,
+        "location": "Denver",
+        "available": true
+    }
+]
