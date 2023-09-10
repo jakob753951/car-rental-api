@@ -6,7 +6,7 @@ use simple_logger::SimpleLogger;
 
 #[get("/")]
 async fn index() -> String {
-    "Hello World!".to_string()
+    "Query /cars to get the available cars :)".to_string()
 }
 
 #[get("/cars")]
