@@ -18,5 +18,3 @@ pub struct Car {
     pub location: String,
     pub available: bool,
 }
-
-// CarType to String conversion
