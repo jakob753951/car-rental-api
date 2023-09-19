@@ -1,7 +1,9 @@
 mod models;
-use models::{Car, CarType};
+mod database;
 
-use actix_web::{get, middleware::Logger, web::Json, App, HttpServer};
+use models::Car;
+
+use actix_web::{get, middleware::Logger, web::Json, App, HttpServer, post};
 use simple_logger::SimpleLogger;
 
 #[get("/")]
@@ -11,71 +13,22 @@ async fn index() -> String {
 
 #[get("/cars")]
 async fn get_cars() -> Json<Vec<Car>> {
-    Json(vec![
-        Car {
-            make: "Toyota".to_string(),
-            model: "Camry".to_string(),
-            year: 2023,
-            car_type: CarType::Sedan,
-            price_per_day: 60.99,
-            location: "Los Angeles".to_string(),
-            available: true,
-        },
-        Car {
-            make: "Ford".to_string(),
-            model: "Explorer".to_string(),
-            year: 2022,
-            car_type: CarType::SUV,
-            price_per_day: 75.50,
-            location: "New York".to_string(),
-            available: true,
-        },
-        Car {
-            make: "Honda".to_string(),
-            model: "Civic".to_string(),
-            year: 2023,
-            car_type: CarType::Compact,
-            price_per_day: 55.75,
-            location: "Chicago".to_string(),
-            available: false,
-        },
-        Car {
-            make: "Chevrolet".to_string(),
-            model: "Tahoe".to_string(),
-            year: 2022,
-            car_type: CarType::SUV,
-            price_per_day: 80.25,
-            location: "Miami".to_string(),
-            available: true,
-        },
-        Car {
-            make: "Nissan".to_string(),
-            model: "Altima".to_string(),
-            year: 2023,
-            car_type: CarType::Sedan,
-            price_per_day: 63.00,
-            location: "San Francisco".to_string(),
-            available: true,
-        },
-        Car {
-            make: "Volkswagen".to_string(),
-            model: "Jetta".to_string(),
-            year: 2019,
-            car_type: CarType::Sedan,
-            price_per_day: 45.50,
-            location: "Dallas".to_string(),
-            available: true,
-        },
-        Car {
-            make: "Hyundai".to_string(),
-            model: "Tucson".to_string(),
-            year: 2018,
-            car_type: CarType::SUV,
-            price_per_day: 52.75,
-            location: "Denver".to_string(),
-            available: true,
-        },
-    ])
+    match database::get_cars().await {
+        Ok(cars) => {
+            Json(cars)
+        }
+        Err(_) => {
+            Json(vec![])
+        }
+    }
+}
+
+#[post("/cars")]
+async fn add_car(car: Json<Car>) -> String {
+    match database::add_car(car.into_inner()).await {
+        Ok(_) => "Added successfully".to_string(),
+        Err(e) => e.to_string()
+    }
 }
 
 #[actix_web::main]
@@ -86,6 +39,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(index)
             .service(get_cars)
+            .service(add_car)
             .wrap(Logger::default())
     })
     .bind(("0.0.0.0", 8000))?

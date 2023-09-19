@@ -9,6 +9,11 @@ edition = "2021"
 actix-web = "4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+mongodb = "2.1"
+bson = { version = "2", features = ["chrono-0_4"] } # Needed for using chrono datetime in doc
+tokio = "1"
+chrono = "0.4"
+futures = "0.3.28" # Used for setting DateTimes
 
 [dependencies.simple_logger]
 version = "4.2.0"
