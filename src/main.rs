@@ -1,9 +1,11 @@
 mod models;
 mod database;
 
+use std::env;
 use models::Car;
 
 use actix_web::{get, middleware::Logger, web::Json, App, HttpServer, post};
+use dotenv::dotenv;
 use simple_logger::SimpleLogger;
 
 #[get("/")]
@@ -34,7 +36,13 @@ async fn add_car(car: Json<Car>) -> String {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     SimpleLogger::new().init().unwrap();
-
+    dotenv().ok();
+    
+    let port = env::var("PORT")
+        .unwrap_or("8000".to_string())
+        .parse::<u16>()
+        .expect("The PORT env variable should be an unsigned 16-bit integer");
+    
     HttpServer::new(|| {
         App::new()
             .service(index)
@@ -42,7 +50,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_car)
             .wrap(Logger::default())
     })
-    .bind(("0.0.0.0", 8000))?
-    .run()
-    .await
+        .bind(("0.0.0.0", port))?
+        .run()
+        .await
 }

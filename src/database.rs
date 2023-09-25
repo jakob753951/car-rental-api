@@ -1,3 +1,4 @@
+use std::env;
 use mongodb::{Client};
 use crate::models::Car;
 use futures::stream::TryStreamExt;
@@ -5,7 +6,8 @@ use mongodb::error::Error;
 
 
 async fn get_client() -> Result<Client, Error> {
-    let connection_string = "mongodb+srv://jakoblm:61lQ5Il8jf0n4BaO@cluster0.vh1fcbg.mongodb.net/?retryWrites=true&w=majority";
+    let connection_string = env::var("CONNECTION_STRING").expect("'connection_string' not specified in ENV");
+    
     Client::with_uri_str(connection_string)
         .await
 }
