@@ -6,7 +6,7 @@ use mongodb::error::Error;
 
 
 async fn get_client() -> Result<Client, Error> {
-    let connection_string = env::var("CONNECTION_STRING").expect("'connection_string' not specified in ENV");
+    let connection_string = env::var("CONNECTION_STRING").expect("'CONNECTION_STRING' not specified in ENV");
     
     Client::with_uri_str(connection_string)
         .await
