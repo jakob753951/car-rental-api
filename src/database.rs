@@ -25,7 +25,7 @@ pub async fn get_cars() -> Result<Vec<Car>, Error> {
     Ok(cars)
 }
 
-pub async fn add_car(car: Car) -> Result<(), Error> {
+pub async fn add_car(car: &Car) -> Result<(), Error> {
     let client = get_client().await?;
     let collection = client.database("rental_cars").collection::<Car>("cars");
     collection.insert_one(car, None).await?;

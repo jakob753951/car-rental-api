@@ -1,8 +1,9 @@
 mod models;
 mod database;
+use models::Car;
 
 use std::env;
-use models::Car;
+use futures::future::join_all;
 
 use actix_web::{get, middleware::Logger, web::Json, App, HttpServer, post};
 use dotenv::dotenv;
@@ -27,9 +28,25 @@ async fn get_cars() -> Json<Vec<Car>> {
 
 #[post("/cars")]
 async fn add_car(car: Json<Car>) -> String {
-    match database::add_car(car.into_inner()).await {
+    match database::add_car(&car.into_inner()).await {
         Ok(_) => "Added successfully".to_string(),
         Err(e) => e.to_string()
+    }
+}
+
+#[post("/cars/bulk")]
+async fn add_cars(cars: Json<Vec<Car>>) -> String {
+    let cars = cars.into_inner();
+    let futures = cars
+        .iter()
+        .map(database::add_car);
+    
+    let results = join_all(futures).await;
+    let successful_inserts = results.iter().filter(|res| res.is_ok()).count();
+    
+    match successful_inserts {
+        0 => "No cars inserted".to_string(),
+        _ => format!("Successfully inserted {successful_inserts} cars"),
     }
 }
 
@@ -48,6 +65,7 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(get_cars)
             .service(add_car)
+            .service(add_cars)
             .wrap(Logger::default())
     })
         .bind(("0.0.0.0", port))?
