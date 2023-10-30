@@ -3,6 +3,7 @@ mod database;
 use models::Car;
 
 use std::env;
+use actix_cors::Cors;
 use futures::future::join_all;
 
 use actix_web::{get, middleware::Logger, web::Json, App, HttpServer, post};
@@ -62,11 +63,13 @@ async fn main() -> std::io::Result<()> {
     
     HttpServer::new(|| {
         App::new()
+            .wrap(Logger::default())
+            .wrap(Cors::permissive())
             .service(index)
             .service(get_cars)
             .service(add_car)
             .service(add_cars)
-            .wrap(Logger::default())
+        
     })
         .bind(("0.0.0.0", port))?
         .run()
