@@ -13,7 +13,7 @@ async fn get_client() -> Result<Client, Error> {
 }
 
 pub async fn get_cars() -> Result<Vec<Car>, Error> {
-    let client = get_client().await?;
+    let client = get_client().await.expect("Couldn't find client");
     let collection = client.database("rental_cars").collection::<Car>("cars");
     let mut cursor = collection.find(None, None).await.unwrap();
 
