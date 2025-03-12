@@ -15,6 +15,11 @@ async fn index() -> String {
     "Query /cars to get the available cars :)".to_string()
 }
 
+#[get("/ping")]
+async fn ping() -> String {
+    "pong!".to_string()
+}
+
 #[get("/cars")]
 async fn get_cars() -> Json<Vec<Car>> {
     match database::get_cars().await {
